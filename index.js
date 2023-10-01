@@ -2,7 +2,6 @@ const express = require("express");
 // const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-const userroutes = require("./Router/userrouter")
 
 port = 5050;
 const app = express();
@@ -27,8 +26,12 @@ mongoose
     console.log(error);
   });
 
+
+  const userroutes = require("./Router/userrouter")
   app.use("/users", userroutes);
 
+  const productrouter  = require("./Router/productrouter");
+  app.use("/products",productrouter);
 
 
 
