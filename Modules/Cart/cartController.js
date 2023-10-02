@@ -1,5 +1,5 @@
-const Cart = require("../Model/cart");
-const Product = require("../Model/product");
+const Cart = require("../../Model/cart");
+const Product  = require("../../Model/product");
 
 exports.addToCart = async (req, res) => {
   const { userId, items } = req.body;
@@ -14,7 +14,7 @@ exports.addToCart = async (req, res) => {
 
       for (let newItems of items) {
         const exisitingItems = updatedCartItems.find((item) => {
-          item.productId = newItems.productId;
+          item.productId == newItems.productId;
         });
 
         //if items aleady presents then increase the quantity...
@@ -33,9 +33,9 @@ exports.addToCart = async (req, res) => {
       for (const item of updatedCartItems) {
         const product = await Product.findById(item.productId);
         if (!product) {
-          return res.status(404).json({ error: "product not found.." });
+           res.status(404).json({ error: "product not found.." });
         }
-        totalAmount += items.quantity * product.price;
+        totalAmount += item.quantity * product.price;
       }
 
       //updating the cart with new items and price...
@@ -44,7 +44,7 @@ exports.addToCart = async (req, res) => {
         {
           $set: {
             items: updatedCartItems,
-            price: totalAmount.toFixed(2),
+            price: parseInt(totalAmount),
           },
         }
       );
@@ -63,7 +63,7 @@ exports.addToCart = async (req, res) => {
       const cartData = {
         userId,
         items,
-        price: totalAmount.toFixed(2),
+        price: parseInt(totalAmount),
       };
       await Cart.create(cartData);
       res.status(200).json({ success: "Cart created successfully" });
@@ -75,7 +75,7 @@ exports.addToCart = async (req, res) => {
 
 exports.getAllCart = async (req, res) => {
   try {
-    const allCarts = await Cart.find({});
+    const allCarts = await Cart.find({}).populate('userId').populate('items.productId');
     if (allCarts.length > 0) {
       res
         .status(200)

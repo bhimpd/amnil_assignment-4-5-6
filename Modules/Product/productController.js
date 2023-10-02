@@ -1,4 +1,4 @@
-const Product = require("../Model/product");
+const Product = require("../../Model/product");
 const mongoose = require("mongoose");
 
 //creating and adding the product...
