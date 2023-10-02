@@ -33,6 +33,9 @@ mongoose
   const productrouter  = require("./Router/productrouter");
   app.use("/products",productrouter);
 
+  const cartrouter = require("./Router/cartrouter");
+  app.use("/cart",cartrouter);
+
 
 
 

@@ -2,9 +2,6 @@ const express = require("express");
 const User = require("../Model/users");
 
 
-
-
-
 // to create the user data..
 
 exports.createUser  = async(req,res)=>{
