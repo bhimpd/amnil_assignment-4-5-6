@@ -2,7 +2,6 @@ const express = require("express");
 // const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-
 port = 5050;
 const app = express();
 
@@ -26,19 +25,17 @@ mongoose
     console.log(error);
   });
 
+const userroutes = require("./Router/userrouter");
+app.use("/users", userroutes);
 
-  const userroutes = require("./Router/userrouter")
-  app.use("/users", userroutes);
+const productrouter = require("./Router/productrouter");
+app.use("/products", productrouter);
 
-  const productrouter  = require("./Router/productrouter");
-  app.use("/products",productrouter);
+const cartrouter = require("./Router/cartrouter");
+app.use("/cart", cartrouter);
 
-  const cartrouter = require("./Router/cartrouter");
-  app.use("/cart",cartrouter);
-
-
-
-
+const orderrouter = require("./Router/orderrouter");
+app.use("/order", orderrouter);
 
 //to create the data and post it...
 // app.post("/users", async (req, res) => {
@@ -53,8 +50,6 @@ mongoose
 // });
 
 // to fetch all the data
-
-
 
 // app.get("/users", async (req, res) => {
 //   try {
