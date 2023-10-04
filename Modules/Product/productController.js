@@ -94,10 +94,10 @@ exports.filterProducts = async (req, res) => {
 exports.outOfStock = async (req, res) => {
   try {
     const quant = req.query.quantity;
-    const data = await Product.find({ 'quantity': { $lt: quant } });
+    const data = await Product.find({ quantity: { $lt: quant } });
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ error: 'error' });
+    res.status(500).json({ error: "error" });
   }
 };
 
@@ -121,10 +121,9 @@ exports.sorting = async (req, res) => {
   }
 };
 
-
 //searching either by name or description....
 
-exports.search = async (req,res)=>{
+exports.search = async (req, res) => {
   try {
     const query = req.query.name;
     const data = await Product.find({
@@ -136,6 +135,33 @@ exports.search = async (req,res)=>{
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
-
   }
-}
+};
+
+//find the toal price using aggregate method...
+
+exports.aggregatePrice = async (req, res) => {
+  try {
+    const aggregateQuery = [
+      {
+        $group: {
+          _id: null, // Group by null to calculate the total over all documents
+          totalPrice: {
+            $sum: { $multiply: ["$price", "$quantity"] },
+          },
+        },
+      },
+    ];
+
+    const aggrePrice = await Product.aggregate(aggregateQuery);
+    if (aggrePrice) {
+      return res
+        .status(200)
+        .json({ totalprice: aggrePrice, message: "totalprice fetched" });
+    } else {
+      return res.status(400).json({ message: "Error totalprice" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

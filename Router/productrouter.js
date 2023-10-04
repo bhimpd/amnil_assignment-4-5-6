@@ -11,6 +11,7 @@ const {
   outOfStock,
   sorting,
   search,
+  aggregatePrice
 } = require("../Modules/Product/productController");
 
 // creating routes for the prodducts..
@@ -24,5 +25,6 @@ router.route("/type/:product_type").get(filterProducts);
 router.route("/out/outofstock").get(outOfStock);
 router.route("/sort/sorting").get(sorting);
 router.route("/search/searching").get(search);
+router.route("/aggregate/totalprice").get(aggregatePrice);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const Cart = require("../../Model/cart");
-const Product  = require("../../Model/product");
+const Product = require("../../Model/product");
 
 exports.addToCart = async (req, res) => {
   const { userId, items } = req.body;
@@ -33,7 +33,7 @@ exports.addToCart = async (req, res) => {
       for (const item of updatedCartItems) {
         const product = await Product.findById(item.productId);
         if (!product) {
-           res.status(404).json({ error: "product not found.." });
+          res.status(404).json({ error: "product not found.." });
         }
         totalAmount += item.quantity * product.price;
       }
@@ -75,7 +75,9 @@ exports.addToCart = async (req, res) => {
 
 exports.getAllCart = async (req, res) => {
   try {
-    const allCarts = await Cart.find({}).populate('userId').populate('items.productId');
+    const allCarts = await Cart.find({})
+      .populate("userId")
+      .populate("items.productId");
     if (allCarts.length > 0) {
       res
         .status(200)
