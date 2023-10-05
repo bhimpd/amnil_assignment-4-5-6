@@ -1,5 +1,7 @@
 const express = require("express");
 // const bodyParser = require("body-parser");
+const bodyParser = require('body-parser');
+
 const mongoose = require("mongoose");
 
 port = 5050;
@@ -36,6 +38,16 @@ app.use("/cart", cartrouter);
 
 const orderrouter = require("./Router/orderrouter");
 app.use("/order", orderrouter);
+
+
+const storerouter =  require ("./Router/storerouter");
+app.use("/store",storerouter);
+
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(express.static('helper'));
+
 
 //to create the data and post it...
 // app.post("/users", async (req, res) => {

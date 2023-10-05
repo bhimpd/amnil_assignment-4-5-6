@@ -142,10 +142,27 @@ exports.search = async (req, res) => {
 
 exports.aggregatePrice = async (req, res) => {
   try {
+    // const aggregateQuery = [
+    //   {
+    //     $group: {
+    //       _id: null, // Group by null to calculate the total over all documents
+    //       totalPrice: {
+    //         $sum: { $multiply: ["$price", "$quantity"] },
+    //       },
+    //     },
+
+    //   },
+    // ];
+
     const aggregateQuery = [
+      // {
+      //   $match: {
+      //     product_type: "electronics"
+      //   }
+      // },
       {
         $group: {
-          _id: null, // Group by null to calculate the total over all documents
+          _id: "$product_type", // Group by product_type
           totalPrice: {
             $sum: { $multiply: ["$price", "$quantity"] },
           },
@@ -154,12 +171,13 @@ exports.aggregatePrice = async (req, res) => {
     ];
 
     const aggrePrice = await Product.aggregate(aggregateQuery);
+
     if (aggrePrice) {
       return res
         .status(200)
-        .json({ totalprice: aggrePrice, message: "totalprice fetched" });
+        .json({ totalprice: aggrePrice, message: "total price fetched" });
     } else {
-      return res.status(400).json({ message: "Error totalprice" });
+      return res.status(400).json({ message: "Error total price" });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
