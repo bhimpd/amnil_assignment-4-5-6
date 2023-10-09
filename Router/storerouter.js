@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 const {
-  nearStores,
+  uploadLogoImage,
   createStores,
   getAllStores,
   getSingleStore,
@@ -14,7 +14,7 @@ const {
 
 
 // adding router to the store....
-router.route("/poststore").post(nearStores,createStores);
+router.route("/poststore").post(uploadLogoImage,createStores);
 router.route("/getallstores").get(getAllStores);
 router.route("/getsinglestore/:storeid").get(getSingleStore);
 router.route("/deletestore/:storeid").delete(deleteStore)

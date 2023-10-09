@@ -1,16 +1,30 @@
 const express = require("express");
 const User = require("../../Model/users");
+const bcrypt =require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 // to create the user data..
 
 exports.createUser = async (req, res) => {
   try {
-    const user = await User.create(req.body);
+const {name,password,gmail,phone} = req.body;
+
+ const hashPassword = await bcrypt.hash(password,10);
+ console.log(hashPassword);
+
+
+    const user = await User.create({
+      name,
+      password:hashPassword,
+      gmail,
+      phone
+    });
 
     return res
       .status(200)
       .json({ user: user, message: "user created sucessfully..." });
-  } catch (error) {
+  }
+   catch (error) {
     res.status(404).json({ error: error.message });
   }
 };

@@ -6,9 +6,23 @@ const Store = require("../../Model/store");
 const multer = require("multer");
 const path = require("path");
 
+
+
+const imageFileFilter = function (req, file, cb) {
+  const allowedFileExtensions = [".jpg", ".jpeg", ".png"];
+
+  // Check if the file extension is allowed
+  const extname = path.extname(file.originalname).toLowerCase();
+  if (allowedFileExtensions.includes(extname)) {
+    cb(null, true);
+  } else {
+    cb(new Error("File must be either jpg, jpeg, or png"), false);
+  }
+};
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../../helper/images')); // Specify the correct destination folder
+    cb(null, path.join(__dirname, '../../uploaded/images')); // provide the location where the image is stored
   },
   filename: function (req, file, cb) {
     const name = Date.now() + "-" + file.originalname;
@@ -16,11 +30,12 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage,
+fileFilter:imageFileFilter,});
+
 
 // creating the new store...
-
-exports.nearStores = upload.single("logo");
+exports.uploadLogoImage = upload.single("logo");
 
 exports.createStores = async (req, res) => {
   try {
