@@ -1,30 +1,30 @@
 const express = require("express");
 const User = require("../../Model/users");
-const bcrypt =require("bcrypt");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // to create the user data..
 
 exports.createUser = async (req, res) => {
   try {
-const {name,password,gmail,phone} = req.body;
-
- const hashPassword = await bcrypt.hash(password,10);
- console.log(hashPassword);
-
+    const { name, password, gmail, phone } = req.body;
+    if (!name || !password || !gmail || !phone) {
+      return res.status(404).json({ error: "all fields required..." });
+    }
+    const hashPassword = await bcrypt.hash(password, 10);
+    //  console.log(hashPassword);
 
     const user = await User.create({
       name,
-      password:hashPassword,
+      password: hashPassword,
       gmail,
-      phone
+      phone,
     });
 
     return res
       .status(200)
       .json({ user: user, message: "user created sucessfully..." });
-  }
-   catch (error) {
+  } catch (error) {
     res.status(404).json({ error: error.message });
   }
 };
@@ -47,7 +47,13 @@ exports.singleUser = async (req, res) => {
     if (!userid) {
       return res.status(404).json({ error: "user id not found..." });
     }
-    res.status(200).json(userid);
+    if (userid._id.toString() === req.user._id.toString()) {
+      res.status(200).json(userid);
+    } else {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: user ID dinot match the tokenn..." });
+    }
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
