@@ -2,11 +2,9 @@ const User = require("../../Model/users");
 const Product = require("../../Model/product");
 const Store = require("../../Model/store");
 
-
 const multer = require("multer");
 const path = require("path");
-
-
+const fs = require("fs");
 
 const imageFileFilter = function (req, file, cb) {
   const allowedFileExtensions = [".jpg", ".jpeg", ".png"];
@@ -38,40 +36,40 @@ fileFilter:imageFileFilter,});
 exports.uploadLogoImage = upload.single("logo");
 
 exports.createStores = async (req, res) => {
+  let storeCreated = null; 
   try {
-    const { store_name, userId, longitude, latitude, product_type } =
-      req.body;
-
-    const user = await User.findOne({ _id: userId });
-    if (!user) {
-      return res.status(400).json({ error: "User id not valid..." });
+    const { userId, store_name } = req.body;
+    const existingStore = await Store.findOne({ store_name });
+    if (existingStore) {
+      return res.status(400).json({ message: 'Store with the same name already exists' });
     }
-
-    if (!latitude || !longitude) {
-      return res
-        .status(400)
-        .json({ error: "Latitude and longitude are required..." });
+    if (!req.body.longitude || !req.body.latitude) {
+      return res.status(400).json({ message: 'please enter longitude and latitude' });
     }
-
-
-    const newStore = new Store({
+    const newStore = {
       store_name: store_name,
-      logo: req.file.filename,
-      product_type: product_type,
-      location: {
-        type: "Point",
-        coordinates: [parseFloat(longitude), parseFloat(latitude)],
-      },
+      product_type: req.body.product_type,
       user: userId,
-    });
-
-    const storeData = await newStore.save();
-
-    res
-      .status(200)
-      .json({ message: "Store created successfully...", storeData });
+      location: {
+        type: 'Point',
+        coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
+      },
+      logo: req.file.filename
+    }
+    storeCreated = await Store.create(newStore);
+    if (!storeCreated) { 
+      throw new Error("Store creation failed");
+    }
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error in addStore:", error);
+    res.status(500).json({ message: "Internal server error" });
+  } finally {
+    if (req.file && storeCreated === null) {
+      fs.unlinkSync(path.join(__dirname, '../../uploaded/images/' + req.file.filename));
+    }
+  }
+  if (storeCreated) {
+    res.status(201).json({ storeCreated, message: "Store added successfully" });
   }
 };
 
