@@ -45,6 +45,7 @@ exports.createUser = async (req, res) => {
 exports.usersList = async (req, res) => {
   try {
     const user = await User.find({});
+    
     return res.status(200).json(user);
   } catch (error) {
     return res.status(404).json({ error: error.message });
@@ -75,7 +76,7 @@ exports.singleUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     const idFromToken = decoded.user.id;

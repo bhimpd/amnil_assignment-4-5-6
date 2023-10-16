@@ -1,5 +1,9 @@
+
+require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require('path');
 
 const mongoose = require("mongoose");
 
@@ -9,7 +13,25 @@ const app = express();
 //use as middleleware to access json data
 app.use(express.json());
 
-// var user = require("./Controller/users");
+const ejs = require("ejs");
+// Set 'views' directory for EJS files
+app.set('views', path.join(__dirname, 'frontend'));
+app.set('view engine', 'ejs');
+
+// Serve static files (CSS, JS, etc.) from the 'forntend' directory
+app.use(express.static(path.join(__dirname, 'frontend')));
+
+const cors = require('cors');
+app.use(cors({
+  origin: 'http://localhost:5050',
+  credentials: true,  
+}));
+
+
+// Render home.ejs when accessing the root URL
+app.get('/home', (req, res) => {
+    res.render('home'); // Renders 'home.ejs' inside the 'forntend' directory
+});
 
 mongoose.set("strictQuery", false);
 const db =
@@ -40,6 +62,9 @@ app.use("/order", orderrouter);
 
 const storerouter = require("./Router/storerouter");
 app.use("/store", storerouter);
+
+const authrouter = require("./Router/authrouter");
+app.use("/auth",authrouter);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
