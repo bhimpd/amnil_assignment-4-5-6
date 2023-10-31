@@ -20,7 +20,7 @@ const imageFileFilter = function (req, file, cb) {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../../uploaded/images')); // provide the location where the image is stored
+    cb(null, path.join(__dirname, '../../uploaded/images')); //provide the location where the image is stored
   },
   filename: function (req, file, cb) {
     const name = Date.now() + "-" + file.originalname;
