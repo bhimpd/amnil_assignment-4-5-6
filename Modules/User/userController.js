@@ -43,13 +43,11 @@ exports.createUser = async (req, res) => {
 
 //to get all the users..
 exports.usersList = async (req, res) => {
-  try {
+  
     const user = await User.find({});
     
-    return res.status(200).json(user);
-  } catch (error) {
-    return res.status(404).json({ error: error.message });
-  }
+    res.json(user);
+  
 };
 
 //to fetch single user data....

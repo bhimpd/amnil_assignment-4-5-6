@@ -1,0 +1,49 @@
+
+<!-- invoice.mjml -->
+
+<mjml>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        
+        <mj-divider border-color="#88B5EB"></mj-divider>
+      </mj-column>
+    </mj-section>
+
+    <mj-section>
+      <mj-column>
+        <mj-text>
+          <h2> Your Recent Invoice</h2>
+        </mj-text>
+        <mj-table>
+          <tr style="border-bottom: 1px solid #ecedee; text-align: left">
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Sub Total</th>
+          </tr>
+          <% products.forEach(function(product) { %>
+          <tr>
+            <td><%= product.product.name %></td>
+            <td>Rs. <%= product.product.price %></td>
+            <td><%= product.quantity %></td>
+            <td>Rs. <%= product.product.price * product.quantity %></td>
+          </tr>
+          <% }); %>
+        </mj-table>
+        <mj-text>Total Price: Rs. <%= total_price %> </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section>
+      <mj-column>
+        <mj-text align="center"
+          >This is a computer-generated invoice. For more information, please
+          contact us through any of the mediums mentioned below:</mj-text
+        >
+      </mj-column>
+    </mj-section>
+
+    
+  </mj-body>
+</mjml>

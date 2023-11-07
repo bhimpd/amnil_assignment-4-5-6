@@ -2,10 +2,10 @@ const express =  require("express");
 const router = express.Router();
 
 
-const {addOrder,getOrderById,getAllOrder,deleteOrder} = require("../Modules/Order/orderController")
+const {checkOut,getOrderById,getAllOrder,deleteOrder} = require("../Modules/Order/orderController")
 
 // creating routes for the order...
-router.route("/checkout/:cartId").post(addOrder);
+router.route("/checkout/:cartId").post(checkOut);
 
 router.route("/getsingleorder/:cartId").get(getOrderById);
 

@@ -188,7 +188,7 @@ const {
 
 /**
  * @swagger
- * /users/auth/register:
+ * /users/current/token:
  *   post:
  *     summary: Register a new user
  *     tags:
@@ -213,9 +213,9 @@ const {
 
 router.route("/").get(validateToken, usersList);
 router.route("/:id").get(basicAuthentication, singleUser);
-router.route("/").post(createUser);
-router.route("/:id").delete(validateToken, deleteUser);
-router.route("/:id").put(validateToken, updateUser);
+router.route("/add").post(createUser);
+router.route("/delete/:id").delete(validateToken, deleteUser);
+router.route("/edit/:id").put(validateToken, updateUser);
 
 router.route("/login").post(loginUser);
 

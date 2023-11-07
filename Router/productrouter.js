@@ -182,7 +182,7 @@ const {
 
 /**
  * @swagger
- * /products/outOfStock:
+ * /products/outofstock:
  *   get:
  *     summary: Get out of stock products
  *     tags:
@@ -210,7 +210,7 @@ const {
 
 /**
 * @swagger
- * /products/filter:
+ * /products/filter/:product_type:
  *   get:
  *     summary: Filter products
  *     tags:
@@ -289,13 +289,13 @@ const {
 
 router.route("/").get(productsList);
 router.route("/:id").get(singleProduct);
-router.route("/").post(createProduct);
-router.route("/:id").delete(deleteProduct);
-router.route("/:id").put(updateProduct);
-router.route("/type/:product_type").get(filterProducts);
-router.route("/out/outofstock").get(outOfStock);
-router.route("/sort/sorting").get(sorting);
-router.route("/search/searching").get(search);
+router.route("/add").post(createProduct);
+router.route("/delete/:id").delete(deleteProduct);
+router.route("/edit/:id").put(updateProduct);
+router.route("/filter/:product_type").get(filterProducts);
+router.route("/outofstock").get(outOfStock);
+router.route("/sort").get(sorting);
+router.route("/search").get(search);
 router.route("/aggregate/totalprice").get(aggregatePrice);
 
 module.exports = router;
